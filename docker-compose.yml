@@ -1,0 +1,63 @@
+version: '1'
+
+services:
+  log-service1:
+    image: sagomezab/taller6arep_logservice
+    container_name: log-service1
+    ports:
+      - "35001:35000"
+    networks:
+      - my_network
+    depends_on:
+      - db
+
+  log-service2:
+    image: sagomezab/taller6arep_logservice
+    container_name: log-service2
+    ports:
+      - "35002:35000"
+    networks:
+      - my_network
+    depends_on:
+      - db
+
+  log-service3:
+    image: sagomezab/taller6arep_logservice
+    container_name: log-service3
+    ports:
+      - "35003:35000"
+    networks:
+      - my_network
+    depends_on:
+      - db
+
+  app_round_robin:
+    image: sagomezab/taller6arep_facade
+    container_name: approundrobin
+    ports:
+      - "38000:46000"
+    networks:
+      - my_network
+    depends_on:
+      - log-service1
+      - log-service2
+      - log-service3
+      - db
+  db:
+    image: mongo:3.6.1
+    container_name: db
+    volumes:
+      - mongodb:/data/db
+      - mongodb_config:/data/configdb
+    ports:
+      - 27017:27017
+    command: mongod
+    networks:
+      - my_network
+
+networks:
+  my_network:
+
+volumes:
+  mongodb:
+  mongodb_config:

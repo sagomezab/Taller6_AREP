@@ -7,16 +7,24 @@ import static spark.Spark.get;
 
 public class LogServerFacade {
 
-    private static final String LOGSERVICEURL = "http://localhost:5000/logservice";
-
     public static void main( String[] args ) {
-        RemoteLogServiceInvoker invoker = new RemoteLogServiceInvoker(LOGSERVICEURL);
+
+        port(getPort());
+
+        RemoteLogServiceInvoker invoker = new RemoteLogServiceInvoker();
 
         staticFiles.location("/public");
 
         get("/logservicefacade", (req, res) -> {
             res.type("application/json");
-            return invoker.invoke(args);
+            return invoker.invoke(req.queryParams("msg"));
         });
+    }
+
+    private static int getPort() {
+        if (System.getenv("PORT") != null) {
+            return Integer.parseInt(System.getenv("PORT"));
+        }
+        return 4567;
     }
 }
