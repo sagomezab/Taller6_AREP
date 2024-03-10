@@ -13,6 +13,7 @@ replay_pid*
 ##############################
 ## Maven
 ##############################
+img/
 target/
 pom.xml.tag
 pom.xml.releaseBackup
